@@ -15,6 +15,6 @@ public class CalCountApplication {
 
 	@RequestMapping("/")
 	public String greeting(){
-		return "Hello world!";
+		return "Hello world! ";
 	}
 }
