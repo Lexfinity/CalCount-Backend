@@ -22,7 +22,7 @@ public class UserRepository {
     @Transactional
     public User createAccount(String username, String firstName, String lastName, String email, String password)
             throws Exception {
-        String passwordHash = "";
+        //String passwordHash = "";
 
         if (!email.contains("@") || !email.contains(".")) {
             throw new InvalidInputException("This is not a valid email address!");
@@ -49,7 +49,7 @@ public class UserRepository {
         u.setFirstName(firstName);
         u.setLastName(lastName);
         u.setEmail(email);
-        u.setPassword(passwordHash);
+        u.setPassword(password);
         u.setCaloriesConsummed(0);
         entityManager.persist(u);
 
@@ -100,6 +100,21 @@ public class UserRepository {
                 throw new NullObjectException("No users exist");
             }
             return users;
+        }
+
+        /**
+         *Method that gets the number of users in the datase
+         * @return number of users
+         */
+        @Transactional
+        public int getNumberUsers(){
+            int number = 0;
+             try{
+                 number = getAllUsers().size();
+             }catch(NullObjectException e){
+                 return 0;
+             }
+             return number;
         }
 
 
