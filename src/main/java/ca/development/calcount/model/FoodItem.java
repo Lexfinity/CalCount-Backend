@@ -10,6 +10,14 @@ public class FoodItem {
     private String foodName;
     private double itemCalorie;
 
+
+    //Associations
+    @ManyToMany
+    @JoinTable(name ="menuItem", 
+    joinColumns = @JoinColumn(name = "restaurant"),
+    inverseJoinColumns = @JoinColumn(name = "foodName"))
+    private Set<FoodItem> restoMenuItem; 
+
     //Setters
     public void setFoodName(String foodName) {
         this.foodName = foodName;

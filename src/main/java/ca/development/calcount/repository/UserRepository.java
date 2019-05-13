@@ -116,5 +116,16 @@ public class UserRepository {
         }
 
 
+        @Transactional
+        public void updateCalCount(User user, FoodItem fi) {
+            double calCount = user.getCaloriesConsummed();
+            double foodCal = fi.getItemCalorie();
+            calCount =+ foodCal;
+            user.setCaloriesConsummed(calCount);
+            entityManager.merge(user);
+
+        }
+
+
 
 }
