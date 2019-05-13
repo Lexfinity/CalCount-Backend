@@ -5,6 +5,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import ca.development.calcount.exception.InvalidInputException;
+import ca.development.calcount.exception.NullObjectException;
 import ca.development.calcount.model.*;
 
 import org.springframework.stereotype.Repository;
@@ -49,10 +50,58 @@ public class UserRepository {
         u.setLastName(lastName);
         u.setEmail(email);
         u.setPassword(passwordHash);
+        u.setCaloriesConsummed(0);
         entityManager.persist(u);
 
         return u;
 
     }
+
+    /**
+         * Method that allows to delete a user's account given its username
+         * @param username
+         * @throws  NullObjectException
+         */
+        @Transactional
+        public User deleteUser(String username) throws NullObjectException {
+            User u = getUser(username);
+            entityManager.remove(u);
+            return u;
+        }
+
+
+        /**
+         * Method that allows get a user given its username
+         * @param username
+         * @return AppUser
+         * @throws  NullObjectException
+         */
+        @Transactional
+        public User getUser(String username) throws NullObjectException {
+            if(entityManager.find(User.class, username) == null) {
+                throw new NullObjectException("User does not exist");
+            }
+            else {
+                User appUser = entityManager.find(User.class, username);
+                return appUser;
+            }
+        }
+
+        /**
+         * Method that gets all users in database using native SQL query statement
+         * @return list of AppUsers
+         */
+        @Transactional
+        public List<User> getAllUsers() throws NullObjectException{
+            Query q = entityManager.createNativeQuery("SELECT * FROM app_users");
+            @SuppressWarnings("unchecked")
+            List<User> users = q.getResultList();
+            if(users.isEmpty()){
+                throw new NullObjectException("No users exist");
+            }
+            return users;
+        }
+
+
 
 }

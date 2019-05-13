@@ -9,8 +9,8 @@ public class Restaurant {
 
     //Attributes
     @Id private String restoName;
-    private List<String> restoMenuItem;
-    private List<Double> itemCalorie;
+     private List<String> restoMenuItem;
+    // private List<Double> itemCalorie;
     // private List<Double> itemFat;
     // private List<Double> itemCarb;
 
@@ -21,9 +21,7 @@ public class Restaurant {
     public void setRestoMenuItem(List<String> restoMenuItem) {
         this.restoMenuItem = restoMenuItem;
     }
-    public void setItemCalorie(List<Double> itemCalorie) {
-        this.itemCalorie = itemCalorie;
-    }
+    
 
 
     //Getters
@@ -32,8 +30,5 @@ public class Restaurant {
     }
     public List<String> getRestoMenuItem() {
         return restoMenuItem;
-    }
-    public List<Double> getItemCalorie() {
-        return itemCalorie;
     }
 }

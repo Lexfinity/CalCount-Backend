@@ -13,7 +13,7 @@ public class User {
 	private String lastName;
 	private String email;
     private String password;
-    private int calorieConsummed;
+    private double calorieConsummed;
 
 
     //Setters
@@ -21,7 +21,10 @@ public class User {
 	public void setFirstName(String firstName) { this.firstName = firstName; }
 	public void setLastName(String lastName) { this.lastName = lastName; }
 	public void setEmail(String email) { this.email = email; }
-    public void setPassword(String password) { this.password = password; }
+	public void setPassword(String password) { this.password = password; }
+	public void setCaloriesConsummed(double calories) {
+		this.calorieConsummed = calories;
+	}
  
     
 
@@ -46,7 +49,7 @@ public class User {
 	{
 		return this.password;
     }
-    public int getCaloriesConsummed() {
+    public double getCaloriesConsummed() {
         return this.calorieConsummed;
     }
 
