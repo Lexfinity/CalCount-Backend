@@ -28,8 +28,8 @@ public class RestaurantRepository {
     }
 
     @Transactional
-    public Restaurant addMenuItem(Restaurant resto, FoodItem fi) {
+    public void addMenuItem(Restaurant resto, FoodItem fi) {
         resto.getRestoMenuItem().add(fi);
-        return resto;
+        entityManager.merge(resto);
     }
 }

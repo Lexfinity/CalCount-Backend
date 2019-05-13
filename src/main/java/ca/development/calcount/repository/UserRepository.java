@@ -52,7 +52,6 @@ public class UserRepository {
         u.setPassword(password);
         u.setCaloriesConsummed(0);
         entityManager.persist(u);
-
         return u;
 
     }
@@ -63,10 +62,9 @@ public class UserRepository {
          * @throws  NullObjectException
          */
         @Transactional
-        public User deleteUser(String username) throws NullObjectException {
+        public void deleteUser(String username) throws NullObjectException {
             User u = getUser(username);
             entityManager.remove(u);
-            return u;
         }
 
 
