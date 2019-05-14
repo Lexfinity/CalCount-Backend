@@ -11,6 +11,7 @@ public class FoodItem {
     private double itemCalorie;
 
 
+/*    
     //Associations
     @ManyToMany
     @JoinTable(name ="menuItem", 
@@ -26,6 +27,7 @@ public class FoodItem {
         this.itemCalorie = itemCalorie;
     }
 
+*/
 
     //Getters
     public String getFoodName() {

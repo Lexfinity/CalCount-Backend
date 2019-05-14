@@ -9,16 +9,16 @@ public class Restaurant {
 
     //Attributes
     @Id private String restoName;
-    //private List<String> restoMenuItem;
+       private Set<FoodItem> restoMenuItem;
     // private List<Double> itemCalorie;
     // private List<Double> itemFat;
     // private List<Double> itemCarb;
 
-
+/*
     //Associations
     @ManyToMany(mappedBy = "menuItem")
     private Set<FoodItem> restoMenuItem;
-
+*/
     //Setters
 	public void setRestaurantName(String restoName) {
         this.restoName = restoName;
