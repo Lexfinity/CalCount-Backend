@@ -34,7 +34,7 @@ public class User {
 	public void setAge(int age) { this.age = age; }
 	public void setWeight(int weight) { this.weight = weight; }
 	public void setHeight(int height) { this.height = height; }
-	public void setPhysicalActivity(Enum PA) { this.setPhysicalActivity(PA); }
+	//public void setPhysicalActivity(Enum PA) { this.setPhysicalActivity(PA); }
 
  
     

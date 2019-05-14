@@ -18,6 +18,7 @@ public class FoodItem {
     joinColumns = @JoinColumn(name = "restaurant"),
     inverseJoinColumns = @JoinColumn(name = "foodName"))
     private Set<FoodItem> restoMenuItem; 
+*/
 
     //Setters
     public void setFoodName(String foodName) {
@@ -27,7 +28,7 @@ public class FoodItem {
         this.itemCalorie = itemCalorie;
     }
 
-*/
+
 
     //Getters
     public String getFoodName() {
