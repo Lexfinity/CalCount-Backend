@@ -115,7 +115,7 @@ public class UserRepository {
              return number;
         }
 
-
+/*
         @Transactional
         public void updateCalCount(User user, FoodItem fi) {
             double calCount = user.getCaloriesConsummed();
@@ -126,6 +126,6 @@ public class UserRepository {
 
         }
 
-
+*/
 
 }

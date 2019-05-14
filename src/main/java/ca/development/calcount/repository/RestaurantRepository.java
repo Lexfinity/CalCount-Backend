@@ -15,7 +15,7 @@ import java.util.*;
 
 @Repository
 public class RestaurantRepository {
-
+/*
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -32,5 +32,5 @@ public class RestaurantRepository {
         resto.getRestoMenuItem().add(fi);
         entityManager.merge(resto);
     }
-
+*/
 }
