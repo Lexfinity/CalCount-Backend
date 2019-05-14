@@ -3,9 +3,9 @@ package ca.development.calcount.model;
 import javax.persistence.*;
 import java.util.*;
 
-@Entity
-@Table(name="FoodItem")
-public class FoodItem {
+// @Entity
+// @Table(name="FoodItem")
+// public class FoodItem {
 
 //     private String foodName;
 //     private double itemCalorie;
@@ -38,4 +38,4 @@ public class FoodItem {
 //         return itemCalorie;
 //     }
 
-}
+//}

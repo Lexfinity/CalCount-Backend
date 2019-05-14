@@ -3,9 +3,9 @@ package ca.development.calcount.model;
 import javax.persistence.*;
 import java.util.*;
 
-@Entity
-@Table(name="Restaurants")
-public class Restaurant {
+// @Entity
+// @Table(name="Restaurants")
+// public class Restaurant {
 
 //     //Attributes
 //     @Id private String restoName;
@@ -35,4 +35,4 @@ public class Restaurant {
 //         return restoMenuItem;
 //     }
 
-}
+//}
