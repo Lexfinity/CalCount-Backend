@@ -12,16 +12,14 @@ public class User {
 	private String firstName;
 	private String lastName;
 	private int age;
-	private int weight;
-	private int height;
-
-	private enum physicalActivity {
-		SENDENTARY , LOW_ACTIVE, ACTIVE, HIGH_ACTIVE; 
-	}
-
+	private double weight;
+	private double height;
+	private double physAct; 
+	private String sex; //M or F
 	private String email;
     private String password;
-    private double calorieConsummed;
+	private double calorieConsummed;
+	private double calorieRequired;
 
 
     //Setters
@@ -30,11 +28,13 @@ public class User {
 	public void setLastName(String lastName) { this.lastName = lastName; }
 	public void setEmail(String email) { this.email = email; }
 	public void setPassword(String password) { this.password = password; }
-	public void setCaloriesConsummed(double calories) { this.calorieConsummed = calories; }
+	public void setCaloriesConsummed(double caloriesC) { this.calorieConsummed = caloriesC; }
+	public void setCaloriesRequired(double caloriesR) { this.calorieConsummed = caloriesR; }
 	public void setAge(int age) { this.age = age; }
-	public void setWeight(int weight) { this.weight = weight; }
-	public void setHeight(int height) { this.height = height; }
-	//public void setPhysicalActivity(Enum PA) { this.setPhysicalActivity(PA); }
+	public void setWeight(double weight2) { this.weight = weight2; }
+	public void setHeight(double height2) { this.height = height2; }
+	public void setPhysicalActivity(double PA) { this.physAct = PA; }
+	public void setSex(String sex) { this.sex = sex; }
 
  
     
@@ -64,11 +64,15 @@ public class User {
 
         return this.calorieConsummed;
 	}
-	public int getWeight() {
+	public double getCalorieRequired() {
+
+        return this.calorieRequired;
+	}
+	public double getWeight() {
 		
 		return this.weight;
 	}
-	public int getHeight() {
+	public double getHeight() {
 		
 		return this.height;
 	}
@@ -76,14 +80,22 @@ public class User {
 
 		return this.age;
 	}
+	public double getPhysicalActivity() {
+		return this.physAct;
+	}
+	public String getSex() {
+
+		return this.sex;
+	}
 
 
 
     @Override
 	public String toString() {
 		return "User [username=" + username + ", First Name=" + firstName + ", Last Name=" + lastName +
-		 ", Age=" + age + ", Weight=" + weight + ", Height=" + height +  ", Email="
-				+ email + ", Password=" + password + ", Calories Consummed=" + calorieConsummed + "]";
+		 ", Age=" + age + ", Weight=" + weight + ", Height=" + height + ", Physical Activity=" + physAct + ", Email="
+				+ email + ", Password=" + password + ", Calories Required=" + calorieRequired +
+				 ", Calories Consummed=" + calorieConsummed + "]";
 	}
 
 }

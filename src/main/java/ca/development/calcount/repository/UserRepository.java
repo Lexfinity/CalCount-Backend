@@ -16,6 +16,8 @@ import java.util.*;
 @Repository
 public class UserRepository {
 
+    double PAct;
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -24,8 +26,17 @@ public class UserRepository {
             throws Exception {
         //String passwordHash = "";
 
-        if (!email.contains("@") || !email.contains(".")) {
-            throw new InvalidInputException("This is not a valid email address!");
+        if (!email.contains("@") ) {
+            throw new InvalidInputException("This is not a valid email address! (missing @)");
+        }
+
+        if (email.contains("@") ) {
+            if (email.contains(".com") || email.contains(".ca") || email.contains(".org") || email.contains(".net") ) {
+
+            }
+            else {
+                throw new InvalidInputException("This is not a valid email address! (invalid domain)");
+            }
         }
 
         if (password.length() <= 6) {
@@ -37,6 +48,7 @@ public class UserRepository {
         if (entityManager.find(User.class, username) != null) {
             throw new IllegalArgumentException("User already exists");
         }
+
         /*
         try {
             passwordHash = Password.getSaltedHash(password);
@@ -51,8 +63,84 @@ public class UserRepository {
         u.setEmail(email);
         u.setPassword(password);
         u.setCaloriesConsummed(0);
-        entityManager.persist(u);
+        entityManager.merge(u);
+        //entityManager.persist(u);
         return u;
+
+    }
+
+    @Transactional
+    public User inputBodyInfo(String username, int age, String sex ,double weight, double height, int physAct)
+            throws InvalidInputException, NullObjectException {
+
+        User u = getUser(username);
+
+        if (age <= 0) {
+            throw new InvalidInputException("Age cannot be less than 1");
+        }
+
+        if (weight <= 0 || height <= 0) {
+            throw new InvalidInputException("Weight and or Height cannot be less than 1");
+        }
+
+        if (!sex.equals("M")  || !sex.equals("m") || !sex.equals("F") || !sex.equals("f") ) {
+            throw new InvalidInputException("Invalid sex selection");
+        }
+
+        if (sex.equals("M") || sex.equals("m")) {
+            switch(physAct) {
+            case 0:
+            PAct = 1.0;
+            case 1:
+            PAct = 1.12;
+            case 2:
+            PAct = 1.27;
+            case 3:
+            PAct = 1.54;
+            }
+        }
+
+        if (sex.equals("F") || sex.equals("f") ) {
+            switch(physAct) {
+            case 0:
+            PAct = 1.0;
+            case 1:
+            PAct = 1.14;
+            case 2:
+            PAct = 1.27;
+            case 3:
+            PAct = 1.45;
+            }
+        }
+
+        u.setAge(age);
+        u.setWeight(weight);
+        u.setHeight(height);
+        u.setSex(sex);
+        u.setPhysicalActivity(PAct);
+        entityManager.merge(u);
+        //entityManager.persist(u);
+        return u;
+
+    }
+
+    public void UserRequiredCalories(User u) {
+        double pA = u.getPhysicalActivity();
+        double weight = u.getWeight();
+        double height = u.getHeight();
+        int age = u.getAge();
+        String sex = u.getSex();
+        Double reqCal;
+
+        if (sex.equals("M") || sex.equals("m")) {
+            reqCal = 864 - (9.72 * age) + pA *(14.2*weight + 503*height);
+        }
+        else {
+            reqCal = 387 - (7.31 * age) + pA *(10.9*weight + 660.7*height);
+        }
+
+        u.setCaloriesRequired(reqCal);
+        entityManager.persist(u);
 
     }
 
@@ -80,8 +168,8 @@ public class UserRepository {
                 throw new NullObjectException("User does not exist");
             }
             else {
-                User appUser = entityManager.find(User.class, username);
-                return appUser;
+                User user = entityManager.find(User.class, username);
+                return user;
             }
         }
 
@@ -91,7 +179,7 @@ public class UserRepository {
          */
         @Transactional
         public List<User> getAllUsers() throws NullObjectException{
-            Query q = entityManager.createNativeQuery("SELECT * FROM app_users");
+            Query q = entityManager.createNativeQuery("SELECT * FROM users");
             @SuppressWarnings("unchecked")
             List<User> users = q.getResultList();
             if(users.isEmpty()){
