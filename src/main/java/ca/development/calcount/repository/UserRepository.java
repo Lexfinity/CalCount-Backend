@@ -83,9 +83,9 @@ public class UserRepository {
             throw new InvalidInputException("Weight and or Height cannot be less than 1");
         }
 
-        if (!sex.equals("M")  || !sex.equals("m") || !sex.equals("F") || !sex.equals("f") ) {
-            throw new InvalidInputException("Invalid sex selection");
-        }
+        // if (!sex.equals("M")  || !sex.equals("m") || !sex.equals("F") || !sex.equals("f") ) {
+        //     throw new InvalidInputException("Invalid sex selection");
+        // }
 
         if (sex.equals("M") || sex.equals("m")) {
             switch(physAct) {
@@ -100,7 +100,7 @@ public class UserRepository {
             }
         }
 
-        if (sex.equals("F") || sex.equals("f") ) {
+        else if (sex.equals("F") || sex.equals("f") ) {
             switch(physAct) {
             case 0:
             PAct = 1.0;
@@ -111,6 +111,10 @@ public class UserRepository {
             case 3:
             PAct = 1.45;
             }
+        }
+
+        else {
+            throw new InvalidInputException("Invalid sex selection");
         }
 
         u.setAge(age);
@@ -124,7 +128,8 @@ public class UserRepository {
 
     }
 
-    public void UserRequiredCalories(User u) {
+    public void userRequiredCalories(String username) throws NullObjectException {
+        User u = getUser(username);
         double pA = u.getPhysicalActivity();
         double weight = u.getWeight();
         double height = u.getHeight();

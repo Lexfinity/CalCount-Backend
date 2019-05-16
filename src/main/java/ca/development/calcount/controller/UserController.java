@@ -57,8 +57,8 @@ public class UserController {
 
     @PostMapping("/bodyInfo/{username}/{age}/{sex}/{weight}/{height}/{physAct}")
     public ResponseEntity inputBodyInfo(@PathVariable("username") String username, @PathVariable("age") int age,
-            @PathVariable("sex") String sex, @PathVariable("weight") double weight, @PathVariable("height") double height,
-            @PathVariable("physAct") int physAct) throws InvalidInputException {
+            @PathVariable("sex") String sex, @PathVariable("weight") double weight,
+            @PathVariable("height") double height, @PathVariable("physAct") int physAct) throws InvalidInputException {
         try {
             User u = userRepository.getUser(username);
             userRepository.inputBodyInfo(username, age, sex, weight, height, physAct);
@@ -67,6 +67,17 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(false, e.getMessage()));
         }
         return ResponseEntity.status(HttpStatus.OK).body(new Response(true, "User body info successfully updated."));
+
+    }
+
+    @PostMapping("/calculate/requiredCal/{username}")
+    public ResponseEntity userRequiredCalories(@PathVariable("username") String username) {
+        try {
+            userRepository.userRequiredCalories(username);
+        } catch (NullObjectException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(false, e.getMessage()));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(new Response(true, "Required daily calories successfully updated."));
 
     }
 
