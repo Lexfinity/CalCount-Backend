@@ -29,7 +29,7 @@ public class User {
 	public void setEmail(String email) { this.email = email; }
 	public void setPassword(String password) { this.password = password; }
 	public void setCaloriesConsummed(double caloriesC) { this.calorieConsummed = caloriesC; }
-	public void setCaloriesRequired(double caloriesR) { this.calorieConsummed = caloriesR; }
+	public void setCaloriesRequired(double caloriesR) { this.calorieRequired = caloriesR; }
 	public void setAge(int age) { this.age = age; }
 	public void setWeight(double weight2) { this.weight = weight2; }
 	public void setHeight(double height2) { this.height = height2; }

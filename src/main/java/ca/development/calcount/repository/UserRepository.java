@@ -128,6 +128,7 @@ public class UserRepository {
 
     }
 
+    @Transactional
     public void userRequiredCalories(String username) throws NullObjectException {
         User u = getUser(username);
         double pA = u.getPhysicalActivity();
@@ -145,7 +146,7 @@ public class UserRepository {
         }
 
         u.setCaloriesRequired(reqCal);
-        entityManager.persist(u);
+        entityManager.merge(u);
 
     }
 
@@ -164,7 +165,7 @@ public class UserRepository {
         /**
          * Method that allows get a user given its username
          * @param username
-         * @return AppUser
+         * @return User
          * @throws  NullObjectException
          */
         @Transactional
