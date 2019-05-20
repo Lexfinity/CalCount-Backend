@@ -1,13 +1,14 @@
 package ca.development.calcount.model;
 
-import javax.persistence.*;
 import java.util.*;
+import javax.persistence.*;
 
  @Entity
  @Table(name="FoodItem")
  public class FoodItem {
 
-     private String foodName;
+    //FoodItem Attributes
+     @Id private String foodName;
      private double itemCalorie;
      private int portionSize;
 
