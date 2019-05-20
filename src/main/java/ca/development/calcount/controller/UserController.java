@@ -134,6 +134,13 @@ public class UserController {
 
     }
 
+    @PostMapping("/update/calCount/{username}/")
+    public ResponseEntity updateCalCount(@PathVariable("username") String username) {
+
+        
+        return ResponseEntity.status(HttpStatus.OK).body(new Response(true, "User account successfully deleted."));
+    }
+
 
     
 }

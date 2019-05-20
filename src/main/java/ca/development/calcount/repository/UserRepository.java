@@ -16,10 +16,16 @@ import java.util.*;
 @Repository
 public class UserRepository {
 
-    double PAct;
-
     @PersistenceContext
     private EntityManager entityManager;
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// USER METHODS                 
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    double PAct;
 
     @Transactional
     public User createAccount(String username, String firstName, String lastName, String email, String password)
@@ -63,8 +69,8 @@ public class UserRepository {
         u.setEmail(email);
         u.setPassword(password);
         u.setCaloriesConsummed(0);
-        entityManager.merge(u);
-        //entityManager.persist(u);
+        //entityManager.merge(u);
+        entityManager.persist(u);
         return u;
 
     }
@@ -209,17 +215,53 @@ public class UserRepository {
              return number;
         }
 
-/*
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// FOOD ITEM METHODS                 
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////
+
         @Transactional
-        public void updateCalCount(User user, FoodItem fi) {
-            double calCount = user.getCaloriesConsummed();
+        public FoodItem createFoodItem(String foodName, double itemCal, int foodPortion) throws Exception {
+            FoodItem fi = new FoodItem();
+
+            if(foodName.equals(null)) {
+                throw new InvalidInputException("Enter name of food item");
+            }
+            
+            if (foodPortion == 0) {
+                foodPortion = 1;
+            }
+            fi.setFoodName(foodName);
+            fi.setItemCalorie(itemCal);
+            fi.setPortionSize(foodPortion);
+            entityManager.persist(fi);
+            return fi;
+        }
+
+
+        @Transactional
+        public FoodItem getFoodItem(String foodName) throws NullObjectException {
+            if(entityManager.find(FoodItem.class, foodName) == null) {
+                throw new NullObjectException("Food Item does not exist");
+            }
+            else {
+                FoodItem fi = entityManager.find(FoodItem.class, foodName);
+                return fi;
+            }
+        }
+
+        @Transactional
+        public void updateCalCount(String username, String foodName) throws NullObjectException {
+            User u = getUser(username);
+            FoodItem fi = getFoodItem(foodName);
+            double calCount = u.getCaloriesConsummed();
             double foodCal = fi.getItemCalorie();
-            calCount =+ foodCal;
-            user.setCaloriesConsummed(calCount);
-            entityManager.merge(user);
+            int foodPortion = fi.getPortionSize();
+            calCount =+ (foodCal*foodPortion);
+            u.setCaloriesConsummed(calCount);
+            entityManager.merge(u);
 
         }
 
-*/
+
 
 }
