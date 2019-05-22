@@ -7,6 +7,7 @@ import javax.persistence.Query;
 import ca.development.calcount.exception.InvalidInputException;
 import ca.development.calcount.exception.NullObjectException;
 import ca.development.calcount.model.*;
+import ca.development.calcount.security.Password;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +31,7 @@ public class UserRepository {
     @Transactional
     public User createAccount(String username, String firstName, String lastName, String email, String password)
             throws Exception {
-        //String passwordHash = "";
+        String passwordHash = "";
 
         if (!email.contains("@") ) {
             throw new InvalidInputException("This is not a valid email address! (missing @)");
@@ -55,13 +56,13 @@ public class UserRepository {
             throw new IllegalArgumentException("User already exists");
         }
 
-        /*
+        
         try {
             passwordHash = Password.getSaltedHash(password);
         } catch (IllegalStateException e) {
             throw new IllegalStateException(e.getMessage());
         }
-        */
+        
         User u = new User();
         u.setUsername(username);
         u.setFirstName(firstName);
@@ -69,7 +70,6 @@ public class UserRepository {
         u.setEmail(email);
         u.setPassword(password);
         u.setCaloriesConsummed(0);
-        //entityManager.merge(u);
         entityManager.persist(u);
         return u;
 
