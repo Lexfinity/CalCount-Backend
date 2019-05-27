@@ -4,6 +4,8 @@ import ca.development.calcount.exception.*;
 import ca.development.calcount.model.*;
 import ca.development.calcount.repository.*;
 import ca.development.calcount.exception.*;
+import ca.development.calcount.service.*;
+import ca.development.calcount.security.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,9 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    AuthenticationService authentication;
+
     /**
      * Greeting
      * 
@@ -29,6 +34,41 @@ public class UserController {
     @RequestMapping("/")
     public String greeting() {
         return "User connected!";
+    }
+
+    /**
+     * Controller method that attempts to login
+     * 
+     * @param username
+     * @param password
+     * @return ResponseEntity
+     */
+    @GetMapping("/auth/{username}/{password}")
+    public ResponseEntity login(@PathVariable("username") String username, @PathVariable("password") String password)
+            throws Exception {
+        // No exception thrown means the authentication succeeded
+        try {
+            authentication.login(username, password);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(false, e.getMessage()));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(new Response(true, "Login successful"));
+    }
+
+    /** Controller method that attempts to logout
+     * @param username
+     * @return ResponseEntity
+     */
+    @GetMapping("/logout/{username}")
+    public ResponseEntity logout(@PathVariable("username")String username) throws Exception {
+        //No exception thrown means the authentication succeeded
+        try {
+            authentication.logout(username);
+        }
+        catch(AuthenticationException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(false, e.getMessage()));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(new Response(true, "Logout successful"));
     }
 
     /**

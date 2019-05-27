@@ -26,9 +26,9 @@ public class AuthenticationService {
 	public AuthenticationService() {}
 
 	/**
-	 * gets an AppUser by session
+	 * gets an User by session
 	 * @param sessionGuid
-	 * @return AppUser
+	 * @return User
 	 * @throws NullObjectException when session is invalid or expired
 	 */
 	public User getUserBySession(String sessionGuid) throws NullObjectException {
@@ -41,9 +41,9 @@ public class AuthenticationService {
 	}
 
 	/**
-	 * gets an AppUser in the repository using the username
+	 * gets an User in the repository using the username
 	 * @param username
-	 * @return AppUser
+	 * @return User
 	 * @throws NullObjectException when user does not exist
 	 */
 	private User findUserByUsername(String username) throws NullObjectException  {
