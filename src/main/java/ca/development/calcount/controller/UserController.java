@@ -112,11 +112,15 @@ public class UserController {
 
     @PostMapping("/calculate/requiredCal/{username}")
     public ResponseEntity userRequiredCalories(@PathVariable("username") String username) {
+        double calCount;
         try {
+            User u = userRepository.getUser(username);
             userRepository.userRequiredCalories(username);
+            calCount = u.getCalorieRequired(); 
         } catch (NullObjectException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(false, e.getMessage()));
         }
+        System.out.println(calCount);
         return ResponseEntity.status(HttpStatus.OK).body(new Response(true, "Required daily calories successfully updated."));
 
     }
@@ -137,7 +141,7 @@ public class UserController {
         } catch (NullObjectException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(false, e.getMessage()));
         }
-        return ResponseEntity.status(HttpStatus.OK).body(user);//user.get(0));
+        return ResponseEntity.status(HttpStatus.OK).body(user);
 
     }
 
@@ -174,13 +178,47 @@ public class UserController {
 
     }
 
-    @PostMapping("/update/calCount/{username}/")
-    public ResponseEntity updateCalCount(@PathVariable("username") String username) {
-
-        
-        return ResponseEntity.status(HttpStatus.OK).body(new Response(true, "User account successfully deleted."));
+    @PostMapping("/create/foodItem/{foodName}/{itemCal}/{foodPortion}")
+    public ResponseEntity createFoodItem(@PathVariable("foodName") String foodName, @PathVariable("itemCal") double itemCal,  @PathVariable("foodPortion") int foodPortion) {
+        return null;
     }
 
+
+    @PostMapping("/update/calCount/{username}/{foodName}")
+    public ResponseEntity updateCalCount(@PathVariable("username") String username, @PathVariable("foodName") String foodName) throws Exception {
+        FoodItem fi = userRepository.getFoodItem(foodName);
+        userRepository.addConsummed(username, fi.getFoodName(), fi.getItemCalorie(), fi.getPortionSize());
+        
+        return ResponseEntity.status(HttpStatus.OK).body(new Response(true, "User CalCount was successfully updated."));
+    }
+
+    @PostMapping("/{username}/consummed/{foodName}/{itemCal}/{foodPortion}")
+    public ResponseEntity addConsummedFood(@PathVariable("username") String username, @PathVariable("foodName") String foodName, @PathVariable("itemCal") double itemCal,  @PathVariable("foodPortion") int foodPortion) throws Exception {
+        User u = new User();
+        //FoodItem fi = new FoodItem();
+        try {
+            u = userRepository.getUser(username);
+            //fi = userRepository.createFoodItem(foodName, itemCal, foodPortion);
+            u = userRepository.addConsummed(username, foodName, itemCal, foodPortion);
+        } catch (NullObjectException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(u);
+
+    }
+
+
+    @GetMapping("/{username}/consummed/all")
+    public ResponseEntity allConsummed(@PathVariable("username") String username){
+        Set<FoodItem> consummed;
+        try {
+            consummed = userRepository.listAllConsummed(username);
+        } catch (NullObjectException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(false, e.getMessage()));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(consummed);
+    }
 
     
 }

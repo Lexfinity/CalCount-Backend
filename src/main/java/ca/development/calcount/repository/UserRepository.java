@@ -3,6 +3,7 @@ package ca.development.calcount.repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.swing.text.StyledEditorKit.ItalicAction;
 
 import ca.development.calcount.exception.InvalidInputException;
 import ca.development.calcount.exception.NullObjectException;
@@ -68,7 +69,7 @@ public class UserRepository {
         u.setFirstName(firstName);
         u.setLastName(lastName);
         u.setEmail(email);
-        u.setPassword(password);
+        u.setPassword(passwordHash);
         u.setCaloriesConsummed(0);
         entityManager.persist(u);
         return u;
@@ -237,7 +238,6 @@ public class UserRepository {
             return fi;
         }
 
-
         @Transactional
         public FoodItem getFoodItem(String foodName) throws NullObjectException {
             if(entityManager.find(FoodItem.class, foodName) == null) {
@@ -248,6 +248,52 @@ public class UserRepository {
                 return fi;
             }
         }
+
+
+        // public List<FoodItem> listAllConsummed(String username) throws NullObjectException {
+        //     Query q = entityManager.createNativeQuery("SELECT * FROM foodItem WHERE foodName IN (SELECT foodName FROM consummedFoodItems WHERE username =:username)");
+        //     q.setParameter("username", username);
+        //     @SuppressWarnings("unchecked")
+        //     List<FoodItem>likedRestaurants = q.getResultList();
+        //     if (likedRestaurants.size() == 0){
+        //         throw new NullObjectException ("User does not have liked restaurants");
+        //     }
+        //     return likedRestaurants;
+        // }
+
+        public Set<FoodItem> listAllConsummed(String username) throws NullObjectException {
+            User u = entityManager.find(User.class, username);
+            Set<FoodItem> consummed = u.getconsummedFoodItems();
+            if (consummed.size() == 0){
+                throw new NullObjectException ("User does not have any consummed items");
+            }
+            return consummed;
+        }
+    
+
+    @Transactional
+	public User addConsummed(String username, String foodName, double itemCal, int foodPortion) throws  Exception {
+		User user = getUser(username);
+        FoodItem foodItem = new FoodItem();
+		try {
+			foodItem = getFoodItem(foodName);
+		}
+		catch(NullObjectException e1){
+
+            foodItem = createFoodItem(foodName, itemCal, foodPortion);
+        }
+        
+        double calCount = user.getCaloriesConsummed();
+        double foodCal = foodItem.getItemCalorie();
+        int fPortion = foodItem.getPortionSize();
+        calCount = calCount + (foodCal*foodPortion);
+        user.addConsummedFood(foodItem);
+        user.setCaloriesConsummed(calCount);
+        //foodItem.addUserConsumption(user);
+        entityManager.merge(user);
+        entityManager.merge(foodItem);
+        return user;
+    }
 
         @Transactional
         public void updateCalCount(String username, String foodName) throws NullObjectException {

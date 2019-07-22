@@ -3,6 +3,8 @@ package ca.development.calcount.model;
 import java.util.*;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name="Users")
 public class User {
@@ -22,6 +24,17 @@ public class User {
 	private double calorieRequired;
 
 
+	//User Associations
+	@ManyToMany
+	@JoinTable(name = "consummedFoodItems",
+			joinColumns = @JoinColumn(name = "username"),
+			inverseJoinColumns = @JoinColumn(name = "foodName"))
+	@JsonIgnoreProperties("userConsumption")
+	private Set<FoodItem> consummedFoodItems;
+
+	// private Set<String> consummedFoodItems;
+
+
     //Setters
 	public void setUsername(String username) { this.username = username; }
 	public void setFirstName(String firstName) { this.firstName = firstName; }
@@ -35,6 +48,9 @@ public class User {
 	public void setHeight(double height2) { this.height = height2; }
 	public void setPhysicalActivity(double PA) { this.physAct = PA; }
 	public void setSex(String sex) { this.sex = sex; }
+	public void setconsummedFoodItems(Set<FoodItem> consummedFoodItems) {
+		this.consummedFoodItems = consummedFoodItems;
+	}
 
  
     
@@ -87,6 +103,19 @@ public class User {
 
 		return this.sex;
 	}
+	public Set<FoodItem> getconsummedFoodItems() {
+		return consummedFoodItems;
+	}
+
+
+	//Liked list
+	public void addConsummedFood(FoodItem consummedFoodItems){
+		if(this.consummedFoodItems == null){
+			this.consummedFoodItems = new HashSet();
+		}
+		this.consummedFoodItems.add(consummedFoodItems);
+	}
+
 
 
 
