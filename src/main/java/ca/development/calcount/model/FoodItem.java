@@ -10,13 +10,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  public class FoodItem {
 
     //FoodItem Attributes
-     @Id private String foodName;
+     @Id @GeneratedValue(strategy=GenerationType.SEQUENCE)
+     long foodId;
+     
+     private String foodName;
      private double itemCalorie;
      private int portionSize;
+     private String dateConsummed;
 
     //Associations
     @ManyToMany(mappedBy = "consummedFoodItems")
-    @JsonIgnoreProperties("consummedFoodItems")
+    @JsonIgnoreProperties({"consummedFoodItems"})
 	private Set<User> userConsumption;
 
 
@@ -43,7 +47,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
      public void setUserConsumption(Set<User> userConsumption) {
 		this.userConsumption = userConsumption;
-	}
+    }
+    public void setDateConsummed (String dateConsummed) {
+        this.dateConsummed = dateConsummed;
+    }
 
 
 
@@ -59,6 +66,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
     }
     public Set<User> getUserConsumption() {
 		return userConsumption;
+    }
+    public String getDateConsummed() {
+        return dateConsummed;
     }
     
 

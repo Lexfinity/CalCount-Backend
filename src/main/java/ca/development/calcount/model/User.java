@@ -30,7 +30,7 @@ public class User {
 			joinColumns = @JoinColumn(name = "username"),
 			inverseJoinColumns = @JoinColumn(name = "foodName"))
 	@JsonIgnoreProperties("userConsumption")
-	private Set<FoodItem> consummedFoodItems;
+	private List<FoodItem> consummedFoodItems;
 
 	// private Set<String> consummedFoodItems;
 
@@ -48,7 +48,7 @@ public class User {
 	public void setHeight(double height2) { this.height = height2; }
 	public void setPhysicalActivity(double PA) { this.physAct = PA; }
 	public void setSex(String sex) { this.sex = sex; }
-	public void setconsummedFoodItems(Set<FoodItem> consummedFoodItems) {
+	public void setconsummedFoodItems(List<FoodItem> consummedFoodItems) {
 		this.consummedFoodItems = consummedFoodItems;
 	}
 
@@ -103,7 +103,7 @@ public class User {
 
 		return this.sex;
 	}
-	public Set<FoodItem> getconsummedFoodItems() {
+	public List<FoodItem> getconsummedFoodItems() {
 		return consummedFoodItems;
 	}
 
@@ -111,7 +111,7 @@ public class User {
 	//Liked list
 	public void addConsummedFood(FoodItem consummedFoodItems){
 		if(this.consummedFoodItems == null){
-			this.consummedFoodItems = new HashSet();
+			this.consummedFoodItems = new ArrayList<FoodItem>();
 		}
 		this.consummedFoodItems.add(consummedFoodItems);
 	}

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.text.SimpleDateFormat;
 
 @Repository
 public class UserRepository {
@@ -223,6 +224,10 @@ public class UserRepository {
         @Transactional
         public FoodItem createFoodItem(String foodName, double itemCal, int foodPortion) throws Exception {
             FoodItem fi = new FoodItem();
+            Date date = new Date();
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            String consummedDate = sdf.format(date);
 
             if(foodName.equals(null)) {
                 throw new InvalidInputException("Enter name of food item");
@@ -234,6 +239,7 @@ public class UserRepository {
             fi.setFoodName(foodName);
             fi.setItemCalorie(itemCal);
             fi.setPortionSize(foodPortion);
+            fi.setDateConsummed(consummedDate);
             entityManager.persist(fi);
             return fi;
         }
@@ -261,33 +267,51 @@ public class UserRepository {
         //     return likedRestaurants;
         // }
 
-        public Set<FoodItem> listAllConsummed(String username) throws NullObjectException {
+        public List<FoodItem> listAllConsummed(String username) throws NullObjectException {
             User u = entityManager.find(User.class, username);
-            Set<FoodItem> consummed = u.getconsummedFoodItems();
+            List<FoodItem> consummed = u.getconsummedFoodItems();
             if (consummed.size() == 0){
                 throw new NullObjectException ("User does not have any consummed items");
             }
             return consummed;
         }
+
+    @Transactional
+    public String getLastItemConsummed(String username) throws NullObjectException {
+        User u = getUser(username);
+        List<FoodItem> consummedItems = u.getconsummedFoodItems();
+        FoodItem lastItem = consummedItems.get(consummedItems.size() -1);
+        String lastConsummedDate = lastItem.getDateConsummed();
+        return lastConsummedDate;
+    }
     
 
     @Transactional
 	public User addConsummed(String username, String foodName, double itemCal, int foodPortion) throws  Exception {
-		User user = getUser(username);
+        User user = getUser(username);
+        // Date date = new Date();
+        // //Date time = new Date();
+        // String lastConsummedDate = getLastItemConsummed(username);
+		        
+        // SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        // Date dateInput = sdf.parse(lastConsummedDate);
+        // String date1 = sdf.format(dateInput);        
+        // String date2 = sdf.format(date);
+        
         FoodItem foodItem = new FoodItem();
-		try {
-			foodItem = getFoodItem(foodName);
-		}
-		catch(NullObjectException e1){
+		// try {
+		// 	//foodItem = getFoodItem(foodName);
+		// }
+		// catch(NullObjectException e1){
 
-            foodItem = createFoodItem(foodName, itemCal, foodPortion);
-        }
+        foodItem = createFoodItem(foodName, itemCal, foodPortion);
         
         double calCount = user.getCaloriesConsummed();
         double foodCal = foodItem.getItemCalorie();
         int fPortion = foodItem.getPortionSize();
         calCount = calCount + (foodCal*foodPortion);
         user.addConsummedFood(foodItem);
+        
         user.setCaloriesConsummed(calCount);
         //foodItem.addUserConsumption(user);
         entityManager.merge(user);

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 // import javax.mail.*;
 // import javax.mail.internet.*;
@@ -195,9 +196,33 @@ public class UserController {
     @PostMapping("/{username}/consummed/{foodName}/{itemCal}/{foodPortion}")
     public ResponseEntity addConsummedFood(@PathVariable("username") String username, @PathVariable("foodName") String foodName, @PathVariable("itemCal") double itemCal,  @PathVariable("foodPortion") int foodPortion) throws Exception {
         User u = new User();
+        Date date = new Date();
+        //Date time = new Date();
+        double calCount = u.getCaloriesConsummed();
+        u = userRepository.getUser(username);
+        List<FoodItem> userConsummed = u.getconsummedFoodItems();
+        String lastConsummedDate = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String date2 = sdf.format(date);
+
+        
+        if(userConsummed.isEmpty() == false) {
+            lastConsummedDate = userRepository.getLastItemConsummed(username);
+        }
+
+        else if (userConsummed.isEmpty() == true) {
+            lastConsummedDate = date2;
+        }
+
+        Date dateInput = sdf.parse(lastConsummedDate);
+        String date1 = sdf.format(dateInput);        
+ 
         //FoodItem fi = new FoodItem();
         try {
-            u = userRepository.getUser(username);
+
+            if ((date1.compareTo(date2)) < 0) {
+                u.setCaloriesConsummed(0);
+            }
             //fi = userRepository.createFoodItem(foodName, itemCal, foodPortion);
             u = userRepository.addConsummed(username, foodName, itemCal, foodPortion);
         } catch (NullObjectException e) {
@@ -205,13 +230,12 @@ public class UserController {
             e.printStackTrace();
         }
         return ResponseEntity.status(HttpStatus.OK).body(u);
-
     }
 
 
     @GetMapping("/{username}/consummed/all")
     public ResponseEntity allConsummed(@PathVariable("username") String username){
-        Set<FoodItem> consummed;
+        List<FoodItem> consummed;
         try {
             consummed = userRepository.listAllConsummed(username);
         } catch (NullObjectException e) {
